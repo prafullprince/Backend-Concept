@@ -23,7 +23,8 @@ exports.userSignUpAuthn = async (req,res)=>{
             // create this user into database
             const newUser = User.create({
                 email,
-                password:hashedPassword
+                password:hashedPassword,
+                role
             });
             res.json({
                 success:true,
@@ -42,6 +43,8 @@ exports.userLoginAuthn = async (req,res)=>{
     try{
         // fetch data from users
         const {email,password} = req.body;
+
+
         // validation of data
         if(!email || !password){
             return res.json({
@@ -57,21 +60,31 @@ exports.userLoginAuthn = async (req,res)=>{
                 message:"user is not available",
             });
         }
+
+
         // check password is matched or not
         // we use bcrypt.compare(1,2) -> it takes 2 arguments = 1>> req.body wala password & 2>> jouser database mn hai uss user ka password
         let passVerification = await bcrypt.compare(password, existingUser.password);
+
+
         // making payload(user ka data)
         const payload = {
             email:existingUser.email,
             id:existingUser._id,
+            role:existingUser.role,
         }
+
+
         if(passVerification){
             // password match kr gaya === jwt client/user ko dedo
             let token = jwt.sign(payload,process.env.JWT_SECRET,{expiresIn:"2h"});
+
             existingUser = existingUser.toObject();
             existingUser.token = token;
             // we have to protect our user password
             existingUser.password = undefined; 
+
+            
             // create options
             const options = {
                 expiresIn: new Date(Date.now()+3*24*60*60*1000),
