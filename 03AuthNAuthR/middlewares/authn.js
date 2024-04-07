@@ -19,7 +19,6 @@ exports.auth = (req,res,next)=>{
         try{
             // is decode data mn hum user ka sara data dekhenge 
             const payload = jwt.verify(token,process.env.JWT_SECRET);
-
             req.existingUser = payload;
         }catch(error){
             console.log(error);

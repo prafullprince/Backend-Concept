@@ -9,7 +9,6 @@ const {userLoginAuthn} = require("../controllers/AuthN");
 // import middlewares
 const {auth,isStudent,isAdmin} = require("../middlewares/authn");
 
-
 // making routes
 router.post("/signup",userSignUpAuthn);
 router.post("/login",userLoginAuthn);

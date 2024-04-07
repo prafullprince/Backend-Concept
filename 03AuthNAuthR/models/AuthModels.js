@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
     role:{
         type:String,
         enum:["Student","Admin","Public"],
+    },
+    otp:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"OTP",
     }
 });
 module.exports = mongoose.model("User",userSchema);
